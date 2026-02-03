@@ -2,6 +2,15 @@ import type { Metadata } from "next";
 import { IBM_Plex_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import {dark} from "@clerk/themes";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs'
 
 const inter = Inter({
   variable: "--font-inter",
@@ -26,6 +35,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ClerkProvider 
+    appearance={{
+      theme:dark
+    }}>
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${plexMono.variable} antialiased`}
@@ -34,10 +47,26 @@ export default function RootLayout({
         defaultTheme="dark"
         enableSystem
         disableTransitionOnChange>
+          <header>
+          <SignedOut>
+            <SignInButton/>
+              
+            <SignUpButton>
+              <button className="bg-rose-500 text-white  p-2 
+              rounded">
+                Sign Up
+               </button>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          </header>
         {children}
         </ThemeProvider>
         
       </body>
     </html>
+    </ClerkProvider>
   );
 }
